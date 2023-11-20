@@ -17,7 +17,7 @@
 
       ResultSet listado = s.executeQuery ("SELECT * FROM socio");
     %>
-    <table>
+    <table>aa
       <tr><th>Código</th><th>Nombre</th><th>Estatura</th><th>Edad</th><th>Localidad</th></tr>
     <%
       while (listado.next()) {
