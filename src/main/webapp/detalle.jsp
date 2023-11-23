@@ -9,46 +9,80 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Detalle socio</title>
 </head>
 <body>
 <%
-    String id = request.getParameter("socioid");
-
-    Connection conn = null;
-    PreparedStatement ps = null;
+    ResultSet rs = null;
+    //CÓDIGO DE VALIDACIÓN
+    boolean valida = true;
+    int id = -1;
     try {
-
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/baloncesto", "root", "user");
-
-        String sql = "select * from socio where socio = "+id;
-
-        ps = conn.prepareStatement(sql);
-        int idx = 1;
-        ps.setInt(idx++, numero);
-        ps.setString(idx++, nombre);
-        ps.setInt(idx++, estatura);
-        ps.setInt(idx++, edad);
-        ps.setString(idx++, localidad);
-
-        int filasAfectadas = ps.executeUpdate();
-        System.out.println("SOCIOS GRABADOS:  " + filasAfectadas);
-
-
-    } catch (Exception ex) {
-        ex.printStackTrace();
-    } finally {
-        //BLOQUE FINALLY PARA CERRAR LA CONEXIÓN CON PROTECCIÓN DE try-catch
-        //SIEMPRE HAY QUE CERRAR LOS ELEMENTOS DE LA  CONEXIÓN DESPUÉS DE UTILIZARLOS
-        //try { rs.close(); } catch (Exception e) { /* Ignored */ }
-        try {
-            ps.close();
-        } catch (Exception e) { /* Ignored */ }
-        try {
-            conn.close();
-        } catch (Exception e) { /* Ignored */ }
+        id = Integer.parseInt(request.getParameter("socioid"));
+    } catch (NumberFormatException nfe) {
+        nfe.printStackTrace();
+        valida = false;
     }
+    //FIN CÓDIGO DE VALIDACIÓN
+
+
+    if (valida) {
+
+
+        id = Integer.parseInt(request.getParameter("socioid"));
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/baloncesto", "root", "user");
+
+
+            String sql = "select * from socio where socioID = ?";
+
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+
+            rs = ps.executeQuery();
+            if (rs.next())
+            {
+                int socio = rs.getInt("socioID");
+                String nombre = rs.getString("nombre");
+                int estatura = rs.getInt("estatura");
+                int edad = rs.getInt("edad");
+                String localidad = rs.getString("localidad");
+                %>
+                <p>ID del socio: <%= socio %></p>
+                <p>Nombre: <%= nombre %></p>
+                <p>Estatura: <%= estatura %></p>
+                <p>Edad: <%= edad %></p>
+                <p>Localidad: <%= localidad %></p>
+                <%
+            }
+
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                //BLOQUE FINALLY PARA CERRAR LA CONEXIÓN CON PROTECCIÓN DE try-catch
+                //SIEMPRE HAY QUE CERRAR LOS ELEMENTOS DE LA  CONEXIÓN DESPUÉS DE UTILIZARLOS
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                    /* Ignored */
+                }
+                try {
+                    ps.close();
+                } catch (Exception e) { /* Ignored */ }
+                try {
+                    conn.close();
+                } catch (Exception e) { /* Ignored */ }
+            }
+        }else{
+
+            }
 %>
 <a href="index.jsp">Volver</a>
 </body>
