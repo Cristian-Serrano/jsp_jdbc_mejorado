@@ -22,7 +22,7 @@
     <%
       while (listado.next()) {
           out.println("<tr><td>");
-          out.println("<a href=\"detalle.jsp?socioid="+listado.getString("socioID")+"\">"+listado.getString("socioID") + "<a/></td>");
+          out.println("<a href=\"detalle.jsp?socioid="+listado.getString("socioID")+"\">"+listado.getString("socioID") + "</a></td>");
           out.println("<td>" + listado.getString("nombre") + "</td>");
           out.println("<td>" + listado.getString("estatura") + "</td>");
           out.println("<td>" + listado.getString("edad") + "</td>");

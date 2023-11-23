@@ -54,6 +54,7 @@
                 int edad = rs.getInt("edad");
                 String localidad = rs.getString("localidad");
                 %>
+                <h1>Detalle socio</h1>
                 <p>ID del socio: <%= socio %></p>
                 <p>Nombre: <%= nombre %></p>
                 <p>Estatura: <%= estatura %></p>
@@ -81,7 +82,7 @@
                 } catch (Exception e) { /* Ignored */ }
             }
         }else{
-
+                response.sendRedirect("pideNumeroSocio.jsp");
             }
 %>
 <a href="index.jsp">Volver</a>
