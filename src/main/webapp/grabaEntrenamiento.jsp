@@ -93,7 +93,7 @@
             ps = conn.prepareStatement(sql);
             int idx = 1;
             ps.setInt(idx++, numero);
-            ps.setString(idx++, tipo.name());
+            ps.setString(idx++, tipo);
             ps.setString(idx++, ubicacion);
             ps.setString(idx++, fecha);
 
