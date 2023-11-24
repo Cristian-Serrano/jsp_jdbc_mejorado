@@ -26,14 +26,17 @@
 
       while (listado.next()) {
 
-          if (socioIDADestacar != null && socioIDADestacar == listado.getInt("sodioID")){
+          if (socioIDADestacar != null && socioIDADestacar == listado.getInt("socioID")){
               claseDestacar = "destacar";
+          } else{
+              claseDestacar = "";
           }
 
 
         %>
           <tr>
-              <td><%out.println("<a href=\"detalle.jsp?socioid="+listado.getString("socioID")+"\">"+listado.getString("socioID") + "</a></td>");%>
+              <td <%out.println("class=\""+claseDestacar+"\"");%>>
+                      <%out.println("<a href=\"detalle.jsp?socioid="+listado.getString("socioID")+"\">"+listado.getString("socioID") + "</a></td>");%>
 
               <td>
                   <%=listado.getString("nombre")%>

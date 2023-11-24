@@ -134,7 +134,9 @@
         }
 
         out.println("Socio dado de alta.");
-        response.sendRedirect("detalle.jsp?sodioIDADestacar="+numero);
+
+        session.setAttribute("socioIDADestacar", numero);
+        response.sendRedirect("pideNumeroSocio.jsp?socioID="+numero);
 } else {
         out.println("Error de validación!");
         response.sendRedirect("formularioSocio.jsp");
