@@ -20,14 +20,34 @@
     <table>
       <tr><th>Código</th><th>Nombre</th><th>Estatura</th><th>Edad</th><th>Localidad</th></tr>
     <%
+        Integer socioIDADestacar = (Integer)session.getAttribute("socioIDADestacar");
+
+        String claseDestacar = "";
+
       while (listado.next()) {
-          out.println("<tr><td>");
-          out.println("<a href=\"detalle.jsp?socioid="+listado.getString("socioID")+"\">"+listado.getString("socioID") + "</a></td>");
-          out.println("<td>" + listado.getString("nombre") + "</td>");
-          out.println("<td>" + listado.getString("estatura") + "</td>");
-          out.println("<td>" + listado.getString("edad") + "</td>");
-          out.println("<td>" + listado.getString("localidad") + "</td>");
-    %>
+
+          if (socioIDADestacar != null && socioIDADestacar == listado.getInt("sodioID")){
+              claseDestacar = "destacar";
+          }
+
+
+        %>
+          <tr>
+              <td><%out.println("<a href=\"detalle.jsp?socioid="+listado.getString("socioID")+"\">"+listado.getString("socioID") + "</a></td>");%>
+
+              <td>
+                  <%=listado.getString("nombre")%>
+              </td>
+              <td>
+                  <%=listado.getString("estatura")%>
+              </td>
+              <td>
+                  <%=listado.getString("edad")%>
+              </td>
+              <td>
+                  <%=listado.getString("localidad")%>
+              </td>
+
       <td>
       <form method="get" action="borraSocio.jsp">
         <input type="hidden" name="codigo" value="<%=listado.getString("socioID") %>"/>

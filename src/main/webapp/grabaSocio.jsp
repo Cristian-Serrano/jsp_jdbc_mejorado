@@ -16,8 +16,15 @@
     int estatura = -1;
     int edad = -1;
     String localidad = null;
+    boolean flagValidaNumero = false;
+    boolean flagValidaNombreNull = false;
+    boolean flagValidaNombreBlanco = false;
+    boolean flagValidaEstatura = false;
+    boolean flagValidaEdad = false;
+    boolean flagValidaLocalidad = false;
     try {
         numero = Integer.parseInt(request.getParameter("numero"));
+        flagValidaNumero = true;
 
         //UTILIZO LOS CONTRACTS DE LA CLASE Objects PARA LA VALIDACIÓN
         //             v---- LANZA NullPointerException SI EL PARÁMETRO ES NULL
@@ -27,12 +34,16 @@
         //          |                                EN EL CASO DE QUE SEA BLANCO LO RECIBIDO, LANZO UNA EXCEPCIÓN PARA INVALIDAR EL PROCESO DE VALIDACIÓN
         //          -------------------------v                      v---------------------------------------|
         if (request.getParameter("nombre").isBlank()) throw new RuntimeException("Parámetro vacío o todo espacios blancos.");
+        flagValidaNombreBlanco = true;
+        flagValidaNombreNull = true;
         nombre = request.getParameter("nombre");
 
 
         estatura = Integer.parseInt(request.getParameter("estatura"));
+        flagValidaEstatura = true;
 
         edad = Integer.parseInt(request.getParameter("edad"));
+        flagValidaEdad = true;
 
         //UTILIZO LOS CONTRACTS DE LA CLASE Objects PARA LA VALIDACIÓN
         //             v---- LANZA NullPointerException SI EL PARÁMETRO ES NULL
@@ -42,10 +53,24 @@
         //          |                                EN EL CASO DE QUE SEA BLANCO LO RECIBIDO, LANZO UNA EXCEPCIÓN PARA INVALIDAR EL PROCESO DE VALIDACIÓN
         //          -------------------------v                      v---------------------------------------|
         if (request.getParameter("localidad").isBlank()) throw new RuntimeException("Parámetro vacío o todo espacios blancos.");
+        flagValidaLocalidad = true;
         localidad = request.getParameter("localidad");
 
     } catch (Exception ex) {
         ex.printStackTrace();
+
+        if (!flagValidaNumero){
+            session.setAttribute("error","Error en número");
+        } else if (!flagValidaNombreBlanco || !flagValidaNombreNull){
+            session.setAttribute("error","Error en nombre");
+        } else if (!flagValidaEstatura){
+            session.setAttribute("error","Error en estatura");
+        } else if (!flagValidaEdad){
+            session.setAttribute("error","Error en edad");
+        } else if (!flagValidaLocalidad){
+            session.setAttribute("error","Error en localidad");
+        }
+
         valida = false;
     }
     //FIN CÓDIGO DE VALIDACIÓN
@@ -95,6 +120,7 @@
 
         } catch (Exception ex) {
             ex.printStackTrace();
+
         } finally {
             //BLOQUE FINALLY PARA CERRAR LA CONEXIÓN CON PROTECCIÓN DE try-catch
             //SIEMPRE HAY QUE CERRAR LOS ELEMENTOS DE LA  CONEXIÓN DESPUÉS DE UTILIZARLOS
@@ -108,8 +134,10 @@
         }
 
         out.println("Socio dado de alta.");
+        response.sendRedirect("detalle.jsp?sodioIDADestacar="+numero);
 } else {
         out.println("Error de validación!");
+        response.sendRedirect("formularioSocio.jsp");
     }
 %>
 
