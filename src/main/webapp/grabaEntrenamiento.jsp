@@ -14,13 +14,13 @@
     String tipo = null;
     String ubicacion = null;
     String fecha = null;
-    boolean flagValidaNumero = false;
+    //boolean flagValidaNumero = false;
     boolean flagValidaTipo = false;
     boolean flagValidaUbicacion = false;
     boolean flagValidaFecha = false;
     try {
-        numero = Integer.parseInt(request.getParameter("numero"));
-        flagValidaNumero = true;
+        //numero = Integer.parseInt(request.getParameter("numero"));
+        //flagValidaNumero = true;
 
 
         //UTILIZO LOS CONTRACTS DE LA CLASE Objects PARA LA VALIDACIÓN
@@ -56,9 +56,10 @@
     } catch (Exception ex) {
         ex.printStackTrace();
 
-        if (!flagValidaNumero){
+        /*if (!flagValidaNumero){
             session.setAttribute("error","Error en número");
-        } else if (!flagValidaTipo){
+        } else*/
+        if (!flagValidaTipo){
             session.setAttribute("error","Error en tipo");
         } else if (!flagValidaUbicacion){
             session.setAttribute("error","Error en ubicacion");
@@ -74,32 +75,38 @@
 
         Connection conn = null;
         PreparedStatement ps = null;
-// 	ResultSet rs = null;
+
+    	ResultSet rs = null;
 
         try {
-
-            //CARGA DEL DRIVER Y PREPARACIÓN DE LA CONEXIÓN CON LA BBDD
+                    //CARGA DEL DRIVER Y PREPARACIÓN DE LA CONEXIÓN CON LA BBDD
             //						v---------UTILIZAMOS LA VERSIÓN MODERNA DE LLAMADA AL DRIVER, no deprecado
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/baloncesto", "root", "user");
+            Statement s = conn.createStatement();
 
+            out.println("<p>TRAZA<p>");
+            rs = s.executeQuery("SELECT MAX(entrenamientoID) FROM entrenamiento");
+            if(rs.next())
+            {
+                numero = rs.getInt("MAX(entrenamientoID)");
+            }
 
             String sql = "INSERT INTO entrenamiento VALUES ( " +
-                    "?, " + //entrenamientoID
+                    "?, " + //numero
                     "?, " + //tipo
                     "?, " + //ubicacion
                     "?)"; //fecha
 
             ps = conn.prepareStatement(sql);
             int idx = 1;
-            ps.setInt(idx++, numero);
+            ps.setInt(idx++, numero+1);
             ps.setString(idx++, tipo);
             ps.setString(idx++, ubicacion);
             ps.setString(idx++, fecha);
 
             int filasAfectadas = ps.executeUpdate();
-            System.out.println("SOCIOS GRABADOS:  " + filasAfectadas);
-
+            System.out.println("ENTRENAMIENTOS GRABADOS:  " + filasAfectadas);
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -107,7 +114,7 @@
         } finally {
             //BLOQUE FINALLY PARA CERRAR LA CONEXIÓN CON PROTECCIÓN DE try-catch
             //SIEMPRE HAY QUE CERRAR LOS ELEMENTOS DE LA  CONEXIÓN DESPUÉS DE UTILIZARLOS
-            //try { rs.close(); } catch (Exception e) { /* Ignored */ }
+            try { rs.close(); } catch (Exception e) { /* Ignored */ }
             try {
                 ps.close();
             } catch (Exception e) { /* Ignored */ }
@@ -116,13 +123,13 @@
             } catch (Exception e) { /* Ignored */ }
         }
 
-        out.println("Socio dado de alta.");
+        out.println("Entrenamiento guardado.");
 
-        session.setAttribute("socioIDADestacar", numero);
-        response.sendRedirect("pideNumeroSocio.jsp?socioID="+numero);
+        session.setAttribute("entrenamientoIDADestacar", numero);
+        response.sendRedirect("listadoEntrenamientos.jsp?entrenamientoID="+numero);
     } else {
         out.println("Error de validación!");
-        response.sendRedirect("formularioSocio.jsp");
+        response.sendRedirect("formularioEntrenamiento.jsp");
     }
 %>
 

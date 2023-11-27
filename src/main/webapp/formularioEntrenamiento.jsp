@@ -7,7 +7,6 @@
 <body>
 <h2>Introduzca los datos del nuevo entrenamiento:</h2>
 <form method="get" action="grabaEntrenamiento.jsp">
-    Nº Entrenamiento <input type="text" name="numero"/></br>
     Tipo <select name="tipo">
             <option value="fisico">Fisico</option>
             <option value="tecnico">Tecnico</option>
@@ -20,9 +19,9 @@
 <%
     String error = (String)session.getAttribute("error");
     if (error != null){
-%>
-<span style="color: orangered"><%= error %></span>
-<%
+        %>
+        <span style="color: orangered"><%= error %></span>
+        <%
         session.removeAttribute("error");
     }
 %>

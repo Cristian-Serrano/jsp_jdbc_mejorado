@@ -57,7 +57,7 @@ tbody td{
     text-shadow:1px 1px 1px #fff;
 }
 
-.destacar{
+.destacar, tr .destacar{
     background-color: #e44444;
     color: white;
 }

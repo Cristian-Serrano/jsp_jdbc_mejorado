@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `socio` (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 CREATE TABLE IF NOT EXISTS `entrenamiento` (
-    `entrenamientoID` int(11) NOT NULL,
+    `entrenamientoID` int(11) AUTO_INCREMENT NOT NULL,
     `tipo` ENUM('fisico', 'tecnico') DEFAULT NULL,
     `ubicacion` varchar(30) COLLATE utf8_spanish2_ci DEFAULT NULL,
     `fecha` varchar(30) COLLATE utf8_spanish2_ci DEFAULT NULL,
