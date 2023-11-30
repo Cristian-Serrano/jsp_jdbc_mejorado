@@ -12,7 +12,7 @@
             <option value="tecnico">Tecnico</option>
         </select></br>
     Ubicacion <input type="text" name="ubicacion"/></br>
-    Fecha <input type="text" name="fecha"/></br>
+    Fecha <input type="date" name="fecha"/></br>
     <input type="submit" value="Aceptar">
 </form>
 

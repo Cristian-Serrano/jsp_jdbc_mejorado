@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="estilos.css" />
 </head>
 <body>
+<h1>Listado de entrenamientos</h1>
 <%
     Class.forName("com.mysql.cj.jdbc.Driver");
     Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/baloncesto","root", "user");
@@ -35,8 +36,9 @@
 
     %>
     <tr <%out.println("class=\""+claseDestacar+"\"");%>>
-        <td>
-                <%=listado.getString("entrenamientoID")%>
+
+        <td <%out.println("class=\""+claseDestacar+"\"");%>>
+                <%out.println("<a href=\"detalleEntrenamiento.jsp?entrenamientoID="+listado.getInt("entrenamientoID")+"\">"+listado.getInt("entrenamientoID") + "</a></td>");%>
         <td>
             <%=listado.getString("tipo")%>
         </td>
@@ -44,7 +46,7 @@
             <%=listado.getString("ubicacion")%>
         </td>
         <td>
-            <%=listado.getString("fecha")%>
+            <%=listado.getDate("fecha")%>
         </td>
 
         <td>

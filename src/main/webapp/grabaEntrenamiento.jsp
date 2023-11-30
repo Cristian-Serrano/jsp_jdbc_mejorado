@@ -1,5 +1,7 @@
 <%@page import="java.sql.*" %>
 <%@page import="java.util.Objects" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -13,7 +15,7 @@
     int numero = -1;
     String tipo = null;
     String ubicacion = null;
-    String fecha = null;
+    java.util.Date fecha = null;
     //boolean flagValidaNumero = false;
     boolean flagValidaTipo = false;
     boolean flagValidaUbicacion = false;
@@ -45,13 +47,10 @@
         //UTILIZO LOS CONTRACTS DE LA CLASE Objects PARA LA VALIDACIÓN
         //             v---- LANZA NullPointerException SI EL PARÁMETRO ES NULL
         Objects.requireNonNull(request.getParameter("fecha"));
-        //CONTRACT nonBlank
-        //UTILIZO isBlank SOBRE EL PARÁMETRO DE TIPO String PARA CHEQUEAR QUE NO ES UN PARÁMETRO VACÍO "" NI CADENA TODO BLANCOS "    "
-        //          |                                EN EL CASO DE QUE SEA BLANCO LO RECIBIDO, LANZO UNA EXCEPCIÓN PARA INVALIDAR EL PROCESO DE VALIDACIÓN
-        //          -------------------------v                      v---------------------------------------|
-        if (request.getParameter("fecha").isBlank()) throw new RuntimeException("Parámetro vacío o todo espacios blancos.");
+
+        var format = new SimpleDateFormat("yyyy-MM-dd");
+        fecha = format.parse(request.getParameter("fecha"));
         flagValidaFecha = true;
-        fecha = request.getParameter("fecha");
 
     } catch (Exception ex) {
         ex.printStackTrace();
@@ -85,11 +84,12 @@
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/baloncesto", "root", "user");
             Statement s = conn.createStatement();
 
+            //realizo yo mismo el autoincrement para que no de problemas
             out.println("<p>TRAZA<p>");
             rs = s.executeQuery("SELECT MAX(entrenamientoID) FROM entrenamiento");
             if(rs.next())
             {
-                numero = rs.getInt("MAX(entrenamientoID)");
+                numero = rs.getInt("MAX(entrenamientoID)")+1;
             }
 
             String sql = "INSERT INTO entrenamiento VALUES ( " +
@@ -100,10 +100,10 @@
 
             ps = conn.prepareStatement(sql);
             int idx = 1;
-            ps.setInt(idx++, numero+1);
+            ps.setInt(idx++, numero);
             ps.setString(idx++, tipo);
             ps.setString(idx++, ubicacion);
-            ps.setString(idx++, fecha);
+            ps.setDate(idx++, new java.sql.Date(fecha.getTime()));
 
             int filasAfectadas = ps.executeUpdate();
             System.out.println("ENTRENAMIENTOS GRABADOS:  " + filasAfectadas);

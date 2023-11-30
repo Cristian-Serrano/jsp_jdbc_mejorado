@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `entrenamiento` (
     `entrenamientoID` int(11) AUTO_INCREMENT NOT NULL,
     `tipo` ENUM('fisico', 'tecnico') DEFAULT NULL,
     `ubicacion` varchar(30) COLLATE utf8_spanish2_ci DEFAULT NULL,
-    `fecha` varchar(30) COLLATE utf8_spanish2_ci DEFAULT NULL,
+    `fecha` DATE,
     PRIMARY KEY (`entrenamientoID`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
